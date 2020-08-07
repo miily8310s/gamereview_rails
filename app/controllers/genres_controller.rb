@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class GenresController < ApplicationController
-  before_action :set_genre, only: [:show, :edit, :update, :destroy]
+  before_action :set_genre, only: %i[show edit update destroy]
+  before_action :is_admin!
 
   # GET /genres
   # GET /genres.json
@@ -9,8 +12,7 @@ class GenresController < ApplicationController
 
   # GET /genres/1
   # GET /genres/1.json
-  def show
-  end
+  def show; end
 
   # GET /genres/new
   def new
@@ -18,8 +20,7 @@ class GenresController < ApplicationController
   end
 
   # GET /genres/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /genres
   # POST /genres.json
@@ -42,7 +43,7 @@ class GenresController < ApplicationController
   def update
     respond_to do |format|
       if @genre.update(genre_params)
-        format.html { redirect_to @genre, notice: 'Genre was successfully updated.' }
+        format.html { redirect_to genres_path, notice: 'Genre was successfully updated.' }
         format.json { render :show, status: :ok, location: @genre }
       else
         format.html { render :edit }
@@ -62,13 +63,14 @@ class GenresController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_genre
-      @genre = Genre.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def genre_params
-      params.require(:genre).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_genre
+    @genre = Genre.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def genre_params
+    params.require(:genre).permit(:name, :feature_in_navbar)
+  end
 end
